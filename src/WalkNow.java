@@ -8,7 +8,6 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,7 +27,7 @@ public class WalkNow implements ActionListener {
 	
 	private boolean repeat = true;
 	
-	public WalkNow() throws MalformedURLException, AWTException {
+	public WalkNow() throws AWTException {
 		initializeTrayIcon();
 		
 		while(repeat) {
@@ -51,12 +50,12 @@ public class WalkNow implements ActionListener {
 			//Remove after 10 seconds
 			try {
 	            Thread.sleep(10_000L);
-	            removeMessage();
 	        } catch (InterruptedException ie) {}
+			removeMessage();
 		}
 	}
 
-	public static void main(String[] args) throws MalformedURLException, AWTException {
+	public static void main(String[] args) throws AWTException {
 		if (!SystemTray.isSupported()) {
 			System.err.println("System tray not supported!");
 			Scanner scanner = new Scanner(System.in);
@@ -64,11 +63,10 @@ public class WalkNow implements ActionListener {
 			scanner.close();
 			return;
         }
-		
 		new WalkNow();
 	}
 	
-	private void initializeTrayIcon() throws AWTException, MalformedURLException  {
+	private void initializeTrayIcon() throws AWTException  {
         Image image = Toolkit.getDefaultToolkit().createImage("image.png");
         
         trayIcon = new TrayIcon(image, "WalkNow");
@@ -88,7 +86,7 @@ public class WalkNow implements ActionListener {
         trayIcon.displayMessage("WalkNow", "1h expired, time to Walk!", MessageType.INFO);
     }
 	
-	public void removeMessage() throws AWTException, MalformedURLException {
+	public void removeMessage() throws AWTException {
 		tray.remove(trayIcon);
 		tray.add(trayIcon);
     }

@@ -17,23 +17,27 @@ import java.util.Scanner;
 public class WalkNow implements ActionListener {
 	//Sleep one hour
 	private static long SLEEPTIME = 3600_000L;
-	
 	private static DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
-	private SystemTray tray = null;
+	
+	private SystemTray tray = SystemTray.getSystemTray();
 	private TrayIcon trayIcon = null;
+	
+	private PopupMenu popupMenu = new PopupMenu();
+	private MenuItem infoItem = new MenuItem("stand up/walk at 00:00:00");
+	private MenuItem exitItem = new MenuItem("Exit");
+	
 	private boolean repeat = true;
 	
 	public WalkNow() throws MalformedURLException, AWTException {
-		createTrayIcon();
+		initializeTrayIcon();
 		
-		System.out.println("Started WalkNow");
 		while(repeat) {
 			long sleepUntil = System.currentTimeMillis() + SLEEPTIME;
 			long timeDifference = SLEEPTIME;
 			while(timeDifference > 0 && repeat) {
 				Date date = new Date(sleepUntil);
 				String dateFormatted = formatter.format(date);
-				System.out.println("stand up/walk at " + dateFormatted);
+				infoItem.setLabel("stand up/walk at " + dateFormatted);
 		        trayIcon.setToolTip("stand up/walk at " + dateFormatted);
 				try {
 					Thread.sleep(timeDifference);
@@ -64,18 +68,15 @@ public class WalkNow implements ActionListener {
 		new WalkNow();
 	}
 	
-	private void createTrayIcon() throws AWTException, MalformedURLException  {
-		tray = SystemTray.getSystemTray();
-		
+	private void initializeTrayIcon() throws AWTException, MalformedURLException  {
         Image image = Toolkit.getDefaultToolkit().createImage("image.png");
         
         trayIcon = new TrayIcon(image, "WalkNow");
         trayIcon.setImageAutoSize(true);
         
-        PopupMenu popupMenu = new PopupMenu();
-        MenuItem defaultItem = new MenuItem("Exit");
-        defaultItem.addActionListener(this);
-        popupMenu.add(defaultItem);
+        popupMenu.add(infoItem);
+        popupMenu.add(exitItem);
+        exitItem.addActionListener(this);
         
         trayIcon.setPopupMenu(popupMenu);
         
@@ -89,6 +90,7 @@ public class WalkNow implements ActionListener {
 	
 	public void removeMessage() throws AWTException, MalformedURLException {
 		tray.remove(trayIcon);
+		tray.add(trayIcon);
     }
 
 	@Override

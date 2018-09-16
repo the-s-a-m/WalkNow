@@ -1,3 +1,4 @@
+package main;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -8,6 +9,7 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -67,7 +69,8 @@ public class WalkNow implements ActionListener {
 	}
 	
 	private void initializeTrayIcon() throws AWTException  {
-        Image image = Toolkit.getDefaultToolkit().createImage("image.png");
+		URL url = WalkNow.class.getResource("/resources/image.png");
+        Image image = Toolkit.getDefaultToolkit().createImage(url);
         
         trayIcon = new TrayIcon(image, "WalkNow");
         trayIcon.setImageAutoSize(true);

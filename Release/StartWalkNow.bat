@@ -1,2 +1,2 @@
-java -jar WalkNow.jar
+java -jar WalkNow01.jar
 pause
